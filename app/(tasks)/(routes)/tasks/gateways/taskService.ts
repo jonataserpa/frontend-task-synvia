@@ -29,10 +29,8 @@ export const handleApiErrors = (error: AxiosError, message: string) => {
         );
         break;
       case 401:
-          toast.error(
-            "Unauthorized, por favor realize o login!!!"
-          );
-          break;  
+        toast.error("Unauthorized, por favor realize o login!!!");
+        break;
       case 404:
         toast.error("Tarefa não encontrado");
         break;
@@ -48,10 +46,17 @@ export const handleApiErrors = (error: AxiosError, message: string) => {
   }
 };
 
-const getAll = async (): Promise<TTasksWithTotalCount | Error> => {
+const getAll = async (
+  title: string,
+  description: string,
+  userId: number,
+  createAt: string,
+): Promise<TTasksWithTotalCount | Error> => {
   try {
     const url = "/task";
-    const { data } = await ApiService.get(url);
+    const { data } = await ApiService.get(url, {
+      params: { skip: 0, take: 10, title, description, userId, createAt },
+    });
 
     if (data) {
       return {

@@ -188,7 +188,7 @@ export const CreateServiceModal = () => {
                 name="userId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>Úsuario</FormLabel>
                     <Select
                       disabled={isLoading}
                       onValueChange={field.onChange}

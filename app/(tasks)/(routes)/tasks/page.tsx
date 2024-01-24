@@ -22,7 +22,7 @@ const TaskPage = () => {
    */
   function getAllServices() {
     debounce(() => {
-      TaskService.getAll().then((result) => {
+      TaskService.getAll("", "", 1, "").then((result) => {
         setIsLoading(false);
 
         if (result instanceof Error) {
@@ -83,6 +83,7 @@ const TaskPage = () => {
         <Navbar />
         <TablePage
           rows={rows}
+          setRows={setRows}
           handleDelete={handleDelete}
           handleEdit={handleEdit}
           totalCount={totalCount}
