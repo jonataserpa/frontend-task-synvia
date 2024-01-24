@@ -1,5 +1,8 @@
 import { LucideIcon } from "lucide-react";
 
+type User = {
+  name: string;
+}
 export interface ITaskProps {
     id?: number;
     title: string;
@@ -9,5 +12,6 @@ export interface ITaskProps {
     href?: string;
     color?: string;
     bgColor?: string;
-    createAt?: Date;
+    createAt: Date;
+    user?: User;
   }

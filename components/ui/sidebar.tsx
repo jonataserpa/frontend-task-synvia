@@ -5,7 +5,7 @@ import { cn } from "@/app/lib/utils";
 import { RouteProps, poppins } from "@/app/constants";
 
 export const Logo = () => {
-  return <Image fill alt="Logo" src="/logo.png" />;
+  return <Image fill alt="Logo" src="/logo-task.jpg" />;
 };
 
 const Sidebar = ({ routes }: RouteProps) => {

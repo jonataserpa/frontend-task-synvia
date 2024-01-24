@@ -15,6 +15,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
+import moment from 'moment';
 
 import {
   Form,
@@ -287,6 +288,8 @@ const TablePage = ({
               <TableHead className="w-[100px]">ID</TableHead>
               <TableHead>Título</TableHead>
               <TableHead>Descrição</TableHead>
+              <TableHead>Data de criação</TableHead>
+              <TableHead>Úsuario</TableHead>
               <TableHead className="w-[10px]"></TableHead>
               <TableHead className="w-[10px]"></TableHead>
             </TableRow>
@@ -299,6 +302,8 @@ const TablePage = ({
                   <TableCell className="font-medium">{row.id}</TableCell>
                   <TableCell>{row.title}</TableCell>
                   <TableCell>{row.description}</TableCell>
+                  <TableCell>{moment(row.createAt.toString()).format('DD/MM/YYYY') || ""}</TableCell>
+                  <TableCell>{row?.user?.name}</TableCell>
 
                   <TableCell className="text-right">
                     <ActionTooltip
