@@ -22,7 +22,7 @@ const TaskPage = () => {
    */
   function getAllServices() {
     debounce(() => {
-      TaskService.getAll("", "", 1, "").then((result) => {
+      TaskService.getAll("", "", undefined, "").then((result) => {
         setIsLoading(false);
 
         if (result instanceof Error) {

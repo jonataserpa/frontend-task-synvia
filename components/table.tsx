@@ -33,8 +33,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { TTasksWithTotalCount, TaskService } from "@/app/(tasks)/(routes)/tasks/gateways/taskService";
-import { ITaskProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iTask.interface";
+import {
+  TaskService,
+} from "@/app/(tasks)/(routes)/tasks/gateways/taskService";
 import { useEffect, useState } from "react";
 import { IUserProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iUser.interface";
 import { useDebounce } from "./hooks";
@@ -57,7 +58,13 @@ const formSchema = z.object({
   createAt: z.string().optional(),
 });
 
-const TablePage = ({ rows, setRows, handleDelete, handleEdit, totalCount }: IRows) => {
+const TablePage = ({
+  rows,
+  setRows,
+  handleDelete,
+  handleEdit,
+  totalCount,
+}: IRows) => {
   const { onOpen } = useModal();
   const [users, setUsers] = useState<IUserProps[]>([]);
   const { debounce } = useDebounce();
@@ -96,8 +103,8 @@ const TablePage = ({ rows, setRows, handleDelete, handleEdit, totalCount }: IRow
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const filter = {
-        title: values.title || "",
-        description: values.description || "",
+        title: values.title?.trim() || "",
+        description: values.description?.trim() || "",
         userId: Number(values.userId),
         createAt: values.createAt?.toString() || "",
       };
@@ -230,6 +237,7 @@ const TablePage = ({ rows, setRows, handleDelete, handleEdit, totalCount }: IRow
                           onValueChange={field.onChange}
                           data-testid="userId"
                           name="userId"
+                          defaultValue={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
@@ -237,6 +245,9 @@ const TablePage = ({ rows, setRows, handleDelete, handleEdit, totalCount }: IRow
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            <SelectItem key={0}  id="Selecione" value="Selecione">
+                              Nenhum Úsuario
+                            </SelectItem>
                             {users.map((type) => (
                               <SelectItem
                                 key={type.id}

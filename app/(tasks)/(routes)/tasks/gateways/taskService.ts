@@ -49,7 +49,7 @@ export const handleApiErrors = (error: AxiosError, message: string) => {
 const getAll = async (
   title: string,
   description: string,
-  userId: number,
+  userId: number | undefined,
   createAt: string,
 ): Promise<TTasksWithTotalCount | Error> => {
   try {
