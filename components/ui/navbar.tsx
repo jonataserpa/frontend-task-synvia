@@ -17,7 +17,7 @@ const Navbar = () => {
             </Button>
             <div className="flex w-full justify-end">
             <ActionTooltip side="right" align="center" label={ currentPage === '/' ? "Ir para cadastro ?" : "Voltar para dashboard" }>
-                <Button onClick={() => currentPage === '/' ? router.push('services') : router.push('/')}>
+                <Button onClick={() => currentPage === '/' ? router.push('tasks') : router.push('/')}>
                     {currentPage  === '/' ? (
                         <ArrowRight className="w-5 h-5" />
                     ): (
