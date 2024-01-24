@@ -49,7 +49,7 @@ const formSchema = z.object({
     .refine((name) => name !== "general", {
       message: "Descrição não pode ser 'generico'",
     }),
-  userId: z.number().min(1, { message: "User é obrigatório" }),
+  userId: z.string().min(1, { message: "User é obrigatório" }),
 });
 
 export const CreateServiceModal = () => {
@@ -66,7 +66,7 @@ export const CreateServiceModal = () => {
     defaultValues: {
       title: server?.title || "",
       description: server?.description || "",
-      userId: 1,
+      userId: server?.userId.toString() || "",
     },
   });
 
@@ -100,6 +100,7 @@ export const CreateServiceModal = () => {
     if (server) {
       form.setValue("title", server.title);
       form.setValue("description", server.description);
+      form.setValue("userId", server.userId.toString());
     } else {
       form.setValue("title", "");
     }
@@ -112,7 +113,7 @@ export const CreateServiceModal = () => {
       const task: ITaskProps = {
         title: values.title,
         description: values.description,
-        userId: values.userId,
+        userId: Number(values.userId),
       };
       if (server === undefined) {
         await TaskService.create(task);
@@ -193,7 +194,7 @@ export const CreateServiceModal = () => {
                       onValueChange={field.onChange}
                       data-testid="userId"
                       name="userId"
-                      defaultValue="1"
+                      defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
@@ -204,8 +205,8 @@ export const CreateServiceModal = () => {
                         {users.map((type) => (
                           <SelectItem
                             key={type.id}
-                            id={type.name}
-                            value={type.name}
+                            id={type.id.toString()}
+                            value={type.id.toString()}
                           >
                             {type.name}
                           </SelectItem>
