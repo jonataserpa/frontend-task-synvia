@@ -70,7 +70,7 @@ const TablePage = ({
   const [users, setUsers] = useState<IUserProps[]>([]);
   const { debounce } = useDebounce();
 
-  function getAllServices() {
+  function getAllUsers() {
     debounce(() => {
       TaskService.getAllUsers().then((result) => {
         if (result instanceof Error) {
@@ -83,7 +83,7 @@ const TablePage = ({
   }
 
   useEffect(() => {
-    getAllServices();
+    getAllUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

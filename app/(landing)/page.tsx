@@ -10,16 +10,16 @@ import { TaskService } from "../(tasks)/(routes)/tasks/gateways/taskService";
 import { routes } from "../constants";
 
 const LandingPage = () => {
-    const { debounce } = useDebounce();
-    const [rows, setRows] = useState<ITaskProps[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+  const { debounce } = useDebounce();
+  const [rows, setRows] = useState<ITaskProps[]>([]);
+  const [_, setIsLoading] = useState(true);
 
-    /**
+  /**
    * Get all tasks
    */
   function getAllTasks() {
     debounce(() => {
-      TaskService.getAll().then((result) => {
+      TaskService.getAll("", "", undefined, "").then((result) => {
         setIsLoading(false);
 
         if (result instanceof Error) {
@@ -40,17 +40,17 @@ const LandingPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-    return (
-        <div className="h-full relative">
-            <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
-                <Sidebar routes={routes} />
-            </div>
-            <main className="md:pl-72">
-                <Navbar />
-                <HomePage rows={rows} />
-            </main>
-        </div>
-    )
-}
+  return (
+    <div className="h-full relative">
+      <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
+        <Sidebar routes={routes} />
+      </div>
+      <main className="md:pl-72">
+        <Navbar />
+        <HomePage rows={rows} />
+      </main>
+    </div>
+  );
+};
 
 export default LandingPage;

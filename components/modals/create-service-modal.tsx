@@ -32,7 +32,6 @@ import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
 import { TaskService } from "@/app/(tasks)/(routes)/tasks/gateways/taskService";
 import { ITaskProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iTask.interface";
-import { statusSelect } from "@/app/constants";
 import { useDebounce } from "../hooks";
 import { IUserProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iUser.interface";
 
@@ -114,6 +113,7 @@ export const CreateServiceModal = () => {
         title: values.title,
         description: values.description,
         userId: Number(values.userId),
+        createAt: new Date()
       };
       if (server === undefined) {
         await TaskService.create(task);
