@@ -1,22 +1,22 @@
 ## Painel
 
-![Dashboard](https://cdn.discordapp.com/attachments/1083115321935798314/1199815931870843040/image.png?ex=65c3eaa9&is=65b175a9&hm=b30156dfa5ae43fe55065255e9fbc857d4a8f1d89bc62ceecb9a2ec953990642&)
+![Dashboard](https://media.discordapp.net/attachments/1083115321935798314/1199815931870843040/image.png?ex=65fb49a9&is=65e8d4a9&hm=a1183a0d1e05f95705d62cec8a81f60256067533b6eade6ae793cc8c47e64b47&=&format=webp&quality=lossless&width=960&height=319)
 
 ## Cadastro
 
-![Cadastro](https://cdn.discordapp.com/attachments/1083115321935798314/1199816073378275330/image.png?ex=65c3eacb&is=65b175cb&hm=ffb5e2b791224e5c66db27262a88005a7aefd719f59345ec1ac556ab2f6403f8&)
+![Cadastro](https://media.discordapp.net/attachments/1083115321935798314/1199816073378275330/image.png?ex=65fb49cb&is=65e8d4cb&hm=3a6aa060dad9e925250ef312b1308694e8de8c7c307d87519d5863485f29b102&=&format=webp&quality=lossless&width=1885&height=647)
 
 ## Modal
 
-![Modal](https://cdn.discordapp.com/attachments/1083115321935798314/1199816174280654888/image.png?ex=65c3eae3&is=65b175e3&hm=690b214cee8870e91b320c3d686e7e31453413aaa655cee633a1e76475b2120e&)
+![Modal](https://cdn.discordapp.com/attachments/1083115321935798314/1199816174280654888/image.png?ex=65fb49e3&is=65e8d4e3&hm=d695e0f51212eb594571d1fde3a532199b668bd6ac41dd9932e2c4e9b2ba4ca0&)
 
 ## Validação
 
-![Form](https://cdn.discordapp.com/attachments/1083115321935798314/1199816258930090044/image.png?ex=65c3eaf7&is=65b175f7&hm=8596979aa9bc2b8cf63c98e9702d18e5fd6ce20566a81552aee06451d0070e18&)
+![Form](https://cdn.discordapp.com/attachments/1083115321935798314/1199816258930090044/image.png?ex=65fb49f7&is=65e8d4f7&hm=569b892ec73842620b82c39ca2bba06f068e0c717475c25ea316e5eb2f994a32&)
 
 ## Mobile
 
-![Mobile](https://cdn.discordapp.com/attachments/1083115321935798314/1199816448638451732/image.png?ex=65c3eb24&is=65b17624&hm=6042eb80025210aa52c12d337be7e8714a468820f09294a8f5948eccb7a3d56a&)
+![Mobile](https://cdn.discordapp.com/attachments/1083115321935798314/1199816448638451732/image.png?ex=65fb4a24&is=65e8d524&hm=6a12262fb832797edf8eff268b59438492d4b3c03bd927a2e4e286b3b010145e&)
 
 ## Description
 
