@@ -3,10 +3,10 @@
 import TablePage from "@/components/table";
 import Navbar from "@/components/ui/navbar";
 import Sidebar from "@/components/ui/sidebar";
-import { ITaskProps } from "./interfaces/iTask.interface";
+import { ICashFlowProps } from "./interfaces/iCashFlow.interface";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/components/hooks";
-import { TaskService } from "./gateways/taskService";
+import { CashFlowService } from "./gateways/cashService";
 import { ModalData, useModal } from "@/components/hooks/use-modal-store";
 import { routes } from "@/app/constants";
 
@@ -15,14 +15,14 @@ const TaskPage = () => {
   const { debounce } = useDebounce();
   const [_, setIsLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
-  const [rows, setRows] = useState<ITaskProps[]>([]);
+  const [rows, setRows] = useState<ICashFlowProps[]>([]);
 
   /**
-   * Get all tasks
+   * Get all cash
    */
   function getAllServices() {
     debounce(() => {
-      TaskService.getAll("", "", undefined, "").then((result) => {
+      CashFlowService.getAll("", "", "").then((result) => {
         setIsLoading(false);
 
         if (result instanceof Error) {
@@ -50,7 +50,7 @@ const TaskPage = () => {
    */
   const handleDelete = (id: number | undefined) => {
     if (confirm("Realmente deseja apagar?")) {
-      TaskService.deleteById(id).then((result) => {
+      CashFlowService.deleteById(id).then((result) => {
         if (result instanceof Error) {
           alert(result.message);
         } else {
@@ -67,7 +67,7 @@ const TaskPage = () => {
   /**
    * Edit task modal dialog
    */
-  function handleEdit(service: ITaskProps) {
+  function handleEdit(service: ICashFlowProps) {
     const serviceValue: ModalData = {
       server: service,
     }

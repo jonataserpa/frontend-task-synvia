@@ -1,16 +1,10 @@
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { ITaskProps } from "../interfaces/iTask.interface";
+import { ICashFlowProps } from "../interfaces/iCashFlow.interface";
 import { ApiService } from "@/components/axios/axios-config";
-import { IUserProps } from "../interfaces/iUser.interface";
 
 export type TTasksWithTotalCount = {
-  data: ITaskProps[];
-  totalCount: number;
-};
-
-export type TUserWithTotalCount = {
-  data: IUserProps[];
+  data: ICashFlowProps[];
   totalCount: number;
 };
 
@@ -47,15 +41,14 @@ export const handleApiErrors = (error: AxiosError, message: string) => {
 };
 
 const getAll = async (
-  title: string,
+  observation: string,
   description: string,
-  userId: number | undefined,
-  createAt: string,
+  createdAt: string,
 ): Promise<TTasksWithTotalCount | Error> => {
   try {
-    const url = "/task";
+    const url = "/cash-flow";
     const { data } = await ApiService.get(url, {
-      params: { skip: 0, take: 10, title, description, userId, createAt },
+      params: { skip: 0, take: 10, observation, description, createdAt },
     });
 
     if (data) {
@@ -72,28 +65,9 @@ const getAll = async (
   }
 };
 
-const getAllUsers = async (): Promise<TUserWithTotalCount | Error> => {
+const getById = async (id: number): Promise<ICashFlowProps | Error> => {
   try {
-    const url = "/user";
-    const { data } = await ApiService.get(url);
-
-    if (data) {
-      return {
-        data: data.data,
-        totalCount: data.headers,
-      };
-    }
-
-    return new Error("Erro ao listar os registros.");
-  } catch (error) {
-    handleApiErrors(error as AxiosError, "Erro ao listar os registros.");
-    throw error;
-  }
-};
-
-const getById = async (id: number): Promise<ITaskProps | Error> => {
-  try {
-    const { data } = await ApiService.get(`/task/${id}`);
+    const { data } = await ApiService.get(`/cash-flow/${id}`);
 
     if (data) {
       return data;
@@ -107,10 +81,10 @@ const getById = async (id: number): Promise<ITaskProps | Error> => {
 };
 
 const create = async (
-  dados: Omit<ITaskProps, "id">
+  dados: Omit<ICashFlowProps, "id">
 ): Promise<string | Error> => {
   try {
-    const { data } = await ApiService.post("/task", dados);
+    const { data } = await ApiService.post("/cash-flow", dados);
 
     if (data) {
       toast.success("Tarefa criado com sucesso.");
@@ -126,10 +100,10 @@ const create = async (
 
 const updateById = async (
   id: number | undefined,
-  data: ITaskProps
+  data: ICashFlowProps
 ): Promise<void | Error> => {
   try {
-    await ApiService.put(`/task/${id}`, data);
+    await ApiService.put(`/cash-flow/${id}`, data);
     toast.success("Tarefa atualizado com sucesso.");
   } catch (error) {
     handleApiErrors(error as AxiosError, "Erro ao atualizar o registro.");
@@ -139,7 +113,7 @@ const updateById = async (
 
 const deleteById = async (id: number | undefined): Promise<void | Error> => {
   try {
-    await ApiService.delete(`/task/${id}`, id);
+    await ApiService.delete(`/cash-flow/${id}`, id);
     toast.success("Tarefa removido com sucesso.");
   } catch (error) {
     handleApiErrors(error as AxiosError, "Erro ao apagar o registro.");
@@ -147,11 +121,10 @@ const deleteById = async (id: number | undefined): Promise<void | Error> => {
   }
 };
 
-export const TaskService = {
+export const CashFlowService = {
   getAll,
   create,
   getById,
   updateById,
   deleteById,
-  getAllUsers,
 };

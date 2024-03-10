@@ -1,24 +1,24 @@
 import { render, screen } from "@testing-library/react";
-import { ITaskProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iTask.interface";
+import { ICashFlowProps } from "@/app/(cash)/(routes)/cash/interfaces/iCashFlow.interface";
 import HomePage from "../page";
 import "@testing-library/jest-dom";
 
-const mockTodos: ITaskProps[] = [
+const mockTodos: ICashFlowProps[] = [
   {
     id: 1,
-    title: "SERPRO",
-    description: "up",
-    href: "/",
-    color: "text-violet-500",
-    bgColor: "bg-violet-500/10",
+    observation: "TEST",
+    description: "Luz",
+    type: "ENTRY",
+    value: 1,
+    companyId: 1
   },
   {
     id: 2,
-    title: "Tribunal de Justiça",
-    description: "warning",
-    href: "/",
-    color: "text-violet-500",
-    bgColor: "bg-violet-500/10",
+    observation: "TEST",
+    description: "Aluguel",
+    type: "ENTRY",
+    value: 1,
+    companyId: 1
   },
 ];
 

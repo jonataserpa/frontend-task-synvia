@@ -40,7 +40,7 @@ Obs: - Tratamentos de erros da api: handleApiErrors (400, 404, 500)
         - useDebounce e modal
      - Contants e Componentes separadas e organizadas;   
 
-## Desafio Synvia
+## Cash flow
  - CRUD: Modal e Form inputs use radix-ui 
 
 ## Installation

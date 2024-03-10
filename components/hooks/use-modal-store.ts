@@ -1,10 +1,10 @@
-import { ITaskProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iTask.interface";
+import { ICashFlowProps } from "@/app/(cash)/(routes)/cash/interfaces/iCashFlow.interface";
 import { create } from "zustand";
 
 export type ModalType = "createService" | "editService" | "deleteService";
 
 export interface ModalData {
-  server?: ITaskProps;
+  server?: ICashFlowProps;
   apiUrl?: string;
   query?: Record<string, any>;
 }

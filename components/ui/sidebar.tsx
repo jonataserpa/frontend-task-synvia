@@ -17,7 +17,7 @@ const Sidebar = ({ routes }: RouteProps) => {
         <Link href="/" className="flex items-center pl-3 mb-14">
           <div className="relative w-8 h-8 mr-4">{Logo()}</div>
           <h3 data-testid="defense" className={cn("text-1xl font-bold", poppins.className)}>
-            Desafio Synvia
+            Cash flow
           </h3>
         </Link>
         <div className="space-y-1">

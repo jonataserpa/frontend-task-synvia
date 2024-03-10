@@ -30,78 +30,63 @@ import {
 import { useEffect, useState } from "react";
 import { useModal } from "../hooks/use-modal-store";
 import { Button } from "../ui/button";
-import { TaskService } from "@/app/(tasks)/(routes)/tasks/gateways/taskService";
-import { ITaskProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iTask.interface";
-import { useDebounce } from "../hooks";
-import { IUserProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iUser.interface";
+import { ICashFlowProps } from "@/app/(cash)/(routes)/cash/interfaces/iCashFlow.interface";
+import { CashFlowService } from "@/app/(cash)/(routes)/cash/gateways/cashService";
 
 const formSchema = z.object({
-  title: z
-    .string()
-    .min(1, { message: "Título é obrigatório" })
-    .refine((name) => name !== "general", {
-      message: "Título não pode ser 'generico'",
-    }),
+  observation: z.string().optional(),
   description: z
     .string()
     .min(1, { message: "Descrição é obrigatório" })
     .refine((name) => name !== "general", {
       message: "Descrição não pode ser 'generico'",
     }),
-  userId: z.string().min(1, { message: "User é obrigatório" }),
+  value: z.string()
+    .min(1, { message: "Valor é obrigatório" })
+    .refine((name) => name !== "general", {
+      message: "Valor não pode ser 'generico'",
+    }),
+  companyId: z.number().optional(),
+  type: z.string().optional(),
 });
+
+const types = [
+  { id: 1, name: "ENTRADA" },
+  { id: 2, name: "SAIDA" },
+];
 
 export const CreateServiceModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
   const isModalOpen = isOpen && type === "createService";
   const { server } = data;
-  const { debounce } = useDebounce();
   const [_, setIsLoading] = useState(true);
-  const [users, setUsers] = useState<IUserProps[]>([]);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: server?.title || "",
+      observation: server?.observation || "",
       description: server?.description || "",
-      userId: server?.userId.toString() || "",
+      type: server?.type || "",
+      companyId: server?.companyId || 1,
+      value: ""
     },
   });
-
-  /**
-   * Get all tasks
-   */
-  function getAllServices() {
-    debounce(() => {
-      TaskService.getAllUsers().then((result) => {
-        setIsLoading(false);
-
-        if (result instanceof Error) {
-          alert(result.message);
-        } else {
-          setUsers(result.data);
-        }
-      });
-    });
-  }
 
   /**
    * Define default values list loading
    */
   useEffect(() => {
     setIsLoading(true);
-    getAllServices();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (server) {
-      form.setValue("title", server.title);
       form.setValue("description", server.description);
-      form.setValue("userId", server.userId.toString());
+      form.setValue("companyId", server.companyId);
+      form.setValue("type", server.type);
     } else {
-      form.setValue("title", "");
+      form.setValue("description", "");
     }
   }, [server, form]);
 
@@ -109,16 +94,17 @@ export const CreateServiceModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const task: ITaskProps = {
-        title: values.title,
+      const cash: ICashFlowProps = {
         description: values.description,
-        userId: Number(values.userId),
-        createAt: new Date()
+        observation: values.observation,
+        value: values.value,
+        type: values.type || "",
+        companyId: 1,
       };
       if (server === undefined) {
-        await TaskService.create(task);
+        await CashFlowService.create(cash);
       } else {
-        await TaskService.updateById(server?.id, task);
+        await CashFlowService.updateById(server?.id, cash);
       }
       form.reset();
       router.refresh();
@@ -139,31 +125,12 @@ export const CreateServiceModal = () => {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Cadastro de tarefas
+            Cadastro do controle financeiro
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="space-y-8 px-6">
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Título</FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                        placeholder="Descrição do título"
-                        {...field}
-                        data-testid="title"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="description"
@@ -185,15 +152,55 @@ export const CreateServiceModal = () => {
               />
               <FormField
                 control={form.control}
-                name="userId"
+                name="observation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Úsuario</FormLabel>
+                    <FormLabel>Observação</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                        placeholder="Observação"
+                        {...field}
+                        data-testid="observation"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="value"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                        placeholder="valor"
+                        {...field}
+                        data-testid="value"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Tipo</FormLabel>
                     <Select
                       disabled={isLoading}
                       onValueChange={field.onChange}
-                      data-testid="userId"
-                      name="userId"
+                      data-testid="type"
+                      name="type"
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -202,7 +209,7 @@ export const CreateServiceModal = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {users.map((type) => (
+                        {types.map((type) => (
                           <SelectItem
                             key={type.id}
                             id={type.id.toString()}

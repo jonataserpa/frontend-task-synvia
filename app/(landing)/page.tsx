@@ -3,15 +3,15 @@
 import Sidebar from "@/components/ui/sidebar";
 import HomePage from "../(dashboard)/(routes)/dashboard/page";
 import Navbar from "@/components/ui/navbar";
-import { ITaskProps } from "../(tasks)/(routes)/tasks/interfaces/iTask.interface";
+import { ICashFlowProps } from "../(cash)/(routes)/cash/interfaces/iCashFlow.interface";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@/components/hooks";
-import { TaskService } from "../(tasks)/(routes)/tasks/gateways/taskService";
+import { CashFlowService } from "../(cash)/(routes)/cash/gateways/cashService";
 import { routes } from "../constants";
 
 const LandingPage = () => {
   const { debounce } = useDebounce();
-  const [rows, setRows] = useState<ITaskProps[]>([]);
+  const [rows, setRows] = useState<ICashFlowProps[]>([]);
   const [_, setIsLoading] = useState(true);
 
   /**
@@ -19,7 +19,7 @@ const LandingPage = () => {
    */
   function getAllTasks() {
     debounce(() => {
-      TaskService.getAll("", "", undefined, "").then((result) => {
+      CashFlowService.getAll("", "", undefined, "").then((result) => {
         setIsLoading(false);
 
         if (result instanceof Error) {

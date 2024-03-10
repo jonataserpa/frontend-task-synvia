@@ -1,8 +1,5 @@
 import { LayoutDashboard, LucideIcon, MessageSquare } from "lucide-react";
 import { Montserrat } from "next/font/google";
-import { ITaskProps } from "./(tasks)/(routes)/tasks/interfaces/iTask.interface";
-
-
 
 export const statusSelect = [
   {
@@ -48,7 +45,7 @@ export const routes = [
   {
     label: "Tarefa",
     icon: MessageSquare,
-    href: "/tasks",
+    href: "/cash",
     color: "text-violet-500",
   },
 ];

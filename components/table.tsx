@@ -1,4 +1,4 @@
-import { IRows } from "@/app/(tasks)/(routes)/tasks/interfaces/iRows.interface";
+import { IRows } from "@/app/(cash)/(routes)/cash/interfaces/iRows.interface";
 import {
   Table,
   TableBody,
@@ -35,19 +35,18 @@ import {
 } from "@/components/ui/select";
 
 import {
-  TaskService,
-} from "@/app/(tasks)/(routes)/tasks/gateways/taskService";
+  CashFlowService,
+} from "@/app/(cash)/(routes)/cash/gateways/cashService";
 import { useEffect, useState } from "react";
-import { IUserProps } from "@/app/(tasks)/(routes)/tasks/interfaces/iUser.interface";
 import { useDebounce } from "./hooks";
 import { Button } from "./ui/button";
 
 const formSchema = z.object({
-  title: z
+  observation: z
     .string()
     .optional()
     .refine((name) => name !== "general", {
-      message: "Título não pode ser 'generico'",
+      message: "Observação não pode ser 'generico'",
     }),
   description: z
     .string()
@@ -55,8 +54,7 @@ const formSchema = z.object({
     .refine((name) => name !== "general", {
       message: "Descrição não pode ser 'generico'",
     }),
-  userId: z.string().optional(),
-  createAt: z.string().optional(),
+    createdAt: z.string().optional(),
 });
 
 const TablePage = ({
@@ -67,53 +65,32 @@ const TablePage = ({
   totalCount,
 }: IRows) => {
   const { onOpen } = useModal();
-  const [users, setUsers] = useState<IUserProps[]>([]);
   const { debounce } = useDebounce();
-
-  function getAllUsers() {
-    debounce(() => {
-      TaskService.getAllUsers().then((result) => {
-        if (result instanceof Error) {
-          alert(result.message);
-        } else {
-          setUsers(result.data);
-        }
-      });
-    });
-  }
-
-  useEffect(() => {
-    getAllUsers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      observation: "",
       description: "",
-      userId: "",
-      createAt: "",
+      createdAt: "",
     },
   });
 
   if (rows && rows.length === 0) {
-    return <div style={{ marginLeft: 20 }}>Nenhuma tarefa cadastrada...</div>;
+    return <div style={{ marginLeft: 20 }}>Nenhum caixa cadastrado...</div>;
   }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const filter = {
-        title: values.title?.trim() || "",
+        observation: values.observation?.trim() || "",
         description: values.description?.trim() || "",
-        userId: Number(values.userId),
-        createAt: values.createAt?.toString() || "",
+        createdAt: values.createdAt?.toString() || "",
       };
-      const result: any = await TaskService.getAll(
-        filter.title,
+      const result: any = await CashFlowService.getAll(
+        filter.observation,
         filter.description,
-        filter.userId,
-        filter.createAt
+        filter.createdAt
       );
       setRows(result.data);
       form.reset();
@@ -122,14 +99,23 @@ const TablePage = ({
     }
   };
 
+  function validateDate(date: Date | undefined) {
+
+    if (date) {
+      return moment(date.toString()).format('DD/MM/YYYY')
+    }
+
+    return ""
+  }
+
   return (
     <div>
       <div className="mb-8 space-y-4">
         <h2 className="px-4  md:px-20 text-4xl md:text-2xl gap-4 font-bold text-left">
-          Cadastro das tarefas
+          Cadastro financeiro
         </h2>
         <p className="px-4 md:px-20 text-muted-foreground font-light text-sm md:text-lg text-left">
-          Listagem e cadastro das tarefas.
+          Listagem das entradas e saídas
           <div className="flex w-full justify-end px-12 -my-5">
             <ActionTooltip
               side="right"
@@ -163,17 +149,17 @@ const TablePage = ({
                 <div className="relative mb-4">
                   <FormField
                     control={form.control}
-                    name="title"
+                    name="observation"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Título</FormLabel>
+                        <FormLabel>Observação</FormLabel>
                         <FormControl>
                           <Input
                             disabled={false}
                             className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                            placeholder="Título"
+                            placeholder="Observação"
                             {...field}
-                            data-testid="title"
+                            data-testid="observation"
                           />
                         </FormControl>
                         <FormMessage />
@@ -207,7 +193,7 @@ const TablePage = ({
                 <div className="relative mb-4">
                   <FormField
                     control={form.control}
-                    name="createAt"
+                    name="createdAt"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Data de criação</FormLabel>
@@ -227,7 +213,7 @@ const TablePage = ({
                   />
                 </div>
 
-                <div className="relative mb-4">
+                {/*<div className="relative mb-4">
                   <FormField
                     control={form.control}
                     name="userId"
@@ -264,7 +250,7 @@ const TablePage = ({
                       </FormItem>
                     )}
                   />
-                </div>
+                            </div>*/}
 
                 <div className="relative mb-4">
                   <Button
@@ -285,11 +271,12 @@ const TablePage = ({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">ID</TableHead>
-              <TableHead>Título</TableHead>
+              <TableHead>ID</TableHead>
               <TableHead>Descrição</TableHead>
+              <TableHead>Observação</TableHead>
+              <TableHead>Valor</TableHead>
+              <TableHead>Tipo</TableHead>
               <TableHead>Data de criação</TableHead>
-              <TableHead>Úsuario</TableHead>
               <TableHead className="w-[10px]"></TableHead>
               <TableHead className="w-[10px]"></TableHead>
             </TableRow>
@@ -300,10 +287,11 @@ const TablePage = ({
               rows.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell className="font-medium">{row.id}</TableCell>
-                  <TableCell>{row.title}</TableCell>
                   <TableCell>{row.description}</TableCell>
-                  <TableCell>{moment(row.createAt.toString()).format('DD/MM/YYYY') || ""}</TableCell>
-                  <TableCell>{row?.user?.name}</TableCell>
+                  <TableCell>{row.observation}</TableCell>
+                  <TableCell>{row.value}</TableCell>
+                  <TableCell>{row.type}</TableCell>
+                  <TableCell>{validateDate(row.createdAt)}</TableCell>
 
                   <TableCell className="text-right">
                     <ActionTooltip
